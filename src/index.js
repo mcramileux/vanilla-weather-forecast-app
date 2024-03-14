@@ -5,7 +5,7 @@ function refreshWeather(response) {
     let descriptionElement = document.querySelector("#description");
     let humidityElement = document.querySelector("#humidity");
     let windSpeedElement = document.querySelector("#wind-speed");
-    let timeElement =document.querySelector("#time");
+    let timeElement = document.querySelector("#time");
     let date = new Date(response.data.time * 1000);
     let iconElement = document.querySelector("#icon");
 
@@ -25,17 +25,17 @@ function formatDate(date) {
     let minutes = date.getMinutes();
     let hours = date.getHours();
     let days = [
-        "Sunday", 
+        "Sunday",
         "Monday",
-        "Tuesday", 
-        "Wednesday", 
-        "Thursday", 
-        "Friday", 
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
         "Saturday",
     ];
     let day = days[date.getDay()];
 
-    if(minutes < 10) {
+    if (minutes < 10) {
         minutes = `0${minutes}`;
     }
     return `${day} ${hours}:${minutes}`;
@@ -53,8 +53,35 @@ function handleSearchSubmit(event) {
     searchCity(searchInput.value);
 }
 
+function displayForecast() {
+    let days = ["Thu", "Fri", "Sat", "Sun", "Mon"];
+    let forecastHtml = "";
+
+    days.forEach(function (day) {
+        forecastHtml = forecastHtml + 
+        `
+            <div class="weather-forecast-day">
+                <div class="weather-forecast-date">${day}</div>
+                <div class="weather-forecast-icon">🌨️</div>
+                <div class="weather-forecast-temperatures">
+                    <div class="weather-forecast-temperature">
+                        <strong>15°</strong>
+                    </div>
+                    <div class="weather-forecast-temperature">9°</div>
+                </div>
+            </div>
+        `;
+    });
+
+    let forecastElement = document.querySelector("#forecast");
+    forecastElement.innerHTML = forecastHtml; 
+}
+
 let searchFormElement = document.querySelector("#search-form");
 searchFormElement.addEventListener("submit", handleSearchSubmit);
 
 // for default city search
 searchCity("Cairns");
+displayForecast();
+
+

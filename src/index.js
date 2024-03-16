@@ -19,6 +19,8 @@ function refreshWeather(response) {
     windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
     temperatureElement.innerHTML = Math.round(temperature);
     iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-app-icon" />`;
+
+    getForecast(response.data.city);
 }
 
 function formatDate(date) {
@@ -43,8 +45,10 @@ function formatDate(date) {
 
 function searchCity(city) {
     let apiKey = "efea043c4addbbb4t1937c3df4occ86c";
-    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
     axios.get(apiUrl).then(refreshWeather);
+    // uncomment this to see the current link
+    // console.log(apiUrl);
 }
 
 function handleSearchSubmit(event) {
@@ -53,13 +57,23 @@ function handleSearchSubmit(event) {
     searchCity(searchInput.value);
 }
 
-function displayForecast() {
+function getForecast(city) {
+    let apiKey = "efea043c4addbbb4t1937c3df4occ86c";
+    let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+    axios(apiUrl).then(displayForecast);
+    // uncomment this to see the forecast link
+    // console.log(apiUrl);
+}
+
+function displayForecast(response) {
+
+    console.log(response.data);
     let days = ["Thu", "Fri", "Sat", "Sun", "Mon"];
     let forecastHtml = "";
 
     days.forEach(function (day) {
-        forecastHtml = forecastHtml + 
-        `
+        forecastHtml = forecastHtml +
+            `
             <div class="weather-forecast-day">
                 <div class="weather-forecast-date">${day}</div>
                 <div class="weather-forecast-icon">🌨️</div>
@@ -74,7 +88,7 @@ function displayForecast() {
     });
 
     let forecastElement = document.querySelector("#forecast");
-    forecastElement.innerHTML = forecastHtml; 
+    forecastElement.innerHTML = forecastHtml;
 }
 
 let searchFormElement = document.querySelector("#search-form");
@@ -82,6 +96,3 @@ searchFormElement.addEventListener("submit", handleSearchSubmit);
 
 // for default city search
 searchCity("Cairns");
-displayForecast();
-
-
